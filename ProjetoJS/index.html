@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <p>Adicione sua tarefa</p>
+    <input id="entrada" type="text" value="teste"/>
+    <button onclick="salvarDados()">Salvar</button>
+
+
+    <br>
+
+    <p>Tarefas a fazer:</p>
+    <div id="editar"></div>
+    <div>
+        <ul id="resultados"></ul>     
+    </div>
+
+ <!-- C do crud, funcoes pra criar registros-->
+
+    <script>
+        let listaDeTarefas = [];
+        let index = 0;
+
+        function salvarDados () {
+            let entrada = document.getElementById("entrada").value;
+            let entradaObj = {
+                id: index,
+                texto: entrada
+            };
+            index++;
+            listaDeTarefas.push(entradaObj);
+            
+            mostrar();
+        };
+
+
+// R do crud, funcoes pra ler os dados//
+        function mostrar () {
+            let ul = document.getElementById("resultados");
+            let html = "";
+            listaDeTarefas.forEach(elemento => {
+                console.log(elemento)
+                html += `<li>
+                    ${elemento.texto} 
+                    <button onclick="editar(${elemento.id})">
+                        Editar
+                    </button>
+                    <button onclick="deletar(${elemento.id})">
+                        Deletar
+                    </button>
+                </li>`;
+            });
+
+            ul.innerHTML = html;
+        };
+
+// U do crud, funcoes pra editar os dados//
+
+        function editar (id) {
+            let html = `<input type="text" id="textoParaEditar">
+                <button onclick="editarDados(${id})">Editar</button>`;
+            let diveditar = document.getElementById('editar');
+            diveditar.innerHTML = html;
+        };
+
+        function editarDados (id) {
+            let textoParaEditar = document.getElementById("textoParaEditar").value;
+            let resultado = listaDeTarefas.find(obj => obj.id === id );
+            resultado.texto = textoParaEditar;
+            mostrar();
+            let diveditar = document.getElementById('editar');
+            diveditar.innerHTML = "";
+        };
+
+// D do crud, funcoes pra deletar os dados//
+        
+        function deletar (id) {
+            let novalista = listaDeTarefas.filter(obj => obj.id !== id);
+            listaDeTarefas = novalista;
+            mostrar();
+        }
+
+    </script>
+
+</body>
+</html>
